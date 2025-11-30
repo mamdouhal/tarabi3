@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tarabi3-web",
+  "compatibility_date": "2025-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "a4f1645e4dad79aa23c58fde076ca4d6",
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://tarabi3-api.mamdouh200464.workers.dev/api"
+  }
+}

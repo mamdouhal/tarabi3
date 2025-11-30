@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=apps/web",
-    "build": "npm run build --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web && cd apps/web && npx opennextjs-cloudflare build",
     "dev:api": "npm run dev --workspace=apps/api",
     "build:api": "npm run build --workspace=apps/api",
     "deploy:api": "npm run deploy --workspace=apps/api",

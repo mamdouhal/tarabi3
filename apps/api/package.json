@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev",
-    "build": "wrangler deploy --dry-run",
-    "deploy": "wrangler deploy"
+    "dev": "wrangler dev --config wrangler.jsonc",
+    "build": "wrangler deploy --dry-run --config wrangler.jsonc",
+    "deploy": "wrangler deploy --config wrangler.jsonc"
   },
   "dependencies": {
     "hono": "^4.0.0"
@@ -13,6 +13,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
     "typescript": "^5.0.0",
-    "wrangler": "^3.28.0"
+    "wrangler": "^4.49.1"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "name": "@tarabi3/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/types.js",
+  "types": "./types.ts",
+  "exports": {
+    ".": {
+      "types": "./types.ts",
+      "import": "./types.ts"
+    }
+  }
+}

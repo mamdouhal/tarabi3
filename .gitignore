@@ -12,6 +12,7 @@ build/
 # Cloudflare
 .wrangler/
 .dev.vars
+.open-next/
 
 # Testing
 coverage/

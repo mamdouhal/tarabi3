@@ -1,9 +1,0 @@
-name = "tarabi3-api"
-main = "src/index.ts"
-compatibility_date = "2024-02-01"
-
-# Uncomment and configure for D1 database
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "tarabi3-db"
-# database_id = "7454f9bd-3b6b-40e3-91f4-71b0b8902d5a"

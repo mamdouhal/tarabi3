@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import AnimatedGrid from './AnimatedGrid';
+import MathBackground from './MathBackground';
 import SquareButton from './SquareButton';
 
 export default function Hero() {
@@ -43,6 +44,7 @@ export default function Hero() {
       }}
     >
       <AnimatedGrid />
+      <MathBackground />
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div

@@ -10,6 +10,6 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "NEXT_PUBLIC_API_BASE_URL": "https://tarabi3-api.mamdouh200464.workers.dev/api"
+    "NEXT_PUBLIC_API_BASE_URL": "https://tarabi3-api.mamdouh200464.workers.dev"
   }
 }

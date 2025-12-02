@@ -1,5 +1,5 @@
 -- Tarabi3 Database Schema
--- Run this with: wrangler d1 execute tarabi3-db --file=./schema.sql
+-- Run this with: wrangler d1 execute tarabi3-db --file=./schema.sql --remote
 
 -- Projects table
 CREATE TABLE IF NOT EXISTS projects (
@@ -33,16 +33,15 @@ CREATE TABLE IF NOT EXISTS services (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Contacts table
-CREATE TABLE IF NOT EXISTS contacts (
+-- Messages table (for contact form)
+CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
-  phone TEXT,
+  phone TEXT NOT NULL,
   company TEXT,
-  message TEXT NOT NULL,
   service TEXT,
-  budget TEXT,
+  message TEXT NOT NULL,
   status TEXT DEFAULT 'new',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP

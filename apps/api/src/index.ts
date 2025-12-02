@@ -214,10 +214,10 @@ app.get('/projects/:id', async (c) => {
 app.post('/contact', async (c) => {
   try {
     const body = await c.req.json();
-    const { name, email, message } = body;
+    const { name, email, phone, company, service, message } = body;
 
-    if (!name || !email || !message) {
-      return c.json({ error: 'Missing required fields' }, 400);
+    if (!name || !email || !phone || !message) {
+      return c.json({ error: 'Name, email, phone, and message are required' }, 400);
     }
 
     // Basic email validation
@@ -226,23 +226,91 @@ app.post('/contact', async (c) => {
       return c.json({ error: 'Invalid email format' }, 400);
     }
 
-    // Sanitize inputs by trimming whitespace
-    const sanitizedName = String(name).trim().slice(0, 100);
-    const sanitizedEmail = String(email).trim().slice(0, 255);
-    const sanitizedMessage = String(message).trim().slice(0, 5000);
+    // Sanitize inputs
+    const sanitizedData = {
+      name: String(name).trim().slice(0, 100),
+      email: String(email).trim().slice(0, 255),
+      phone: String(phone).trim().slice(0, 50),
+      company: company ? String(company).trim().slice(0, 100) : null,
+      service: service ? String(service).trim().slice(0, 100) : null,
+      message: String(message).trim().slice(0, 5000),
+    };
 
-    if (!sanitizedName || !sanitizedMessage) {
+    if (!sanitizedData.name || !sanitizedData.message) {
       return c.json({ error: 'Name and message cannot be empty' }, 400);
     }
 
-    // In production, save to DB and/or send email
-    // For now, just acknowledge receipt
+    // Save to database
+    try {
+      await c.env.DB.prepare(
+        `INSERT INTO messages (name, email, phone, company, service, message, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, 'new', datetime('now'))`
+      ).bind(
+        sanitizedData.name,
+        sanitizedData.email,
+        sanitizedData.phone,
+        sanitizedData.company,
+        sanitizedData.service,
+        sanitizedData.message
+      ).run();
+    } catch (dbError) {
+      console.error('DB Error:', dbError);
+      // Continue even if DB fails - log for monitoring
+    }
+
     return c.json({
       status: 'ok',
-      message: 'Contact form submitted successfully',
+      message: 'Thank you! Your message has been sent successfully.',
     });
   } catch (error) {
     return c.json({ error: 'Failed to submit form' }, 500);
+  }
+});
+
+// ============================================
+// ADMIN MESSAGES ENDPOINTS
+// ============================================
+
+// Get all messages
+app.get('/admin/messages', async (c) => {
+  try {
+    const { results } = await c.env.DB.prepare(
+      'SELECT * FROM messages ORDER BY created_at DESC'
+    ).all();
+    return c.json({ messages: results || [] });
+  } catch (error) {
+    return c.json({ messages: [], error: 'Failed to fetch messages' });
+  }
+});
+
+// Update message status
+app.patch('/admin/messages/:id/status', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const { status } = await c.req.json();
+    
+    if (!['new', 'read', 'replied'].includes(status)) {
+      return c.json({ error: 'Invalid status' }, 400);
+    }
+    
+    await c.env.DB.prepare(
+      'UPDATE messages SET status = ? WHERE id = ?'
+    ).bind(status, id).run();
+    
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: 'Failed to update status' }, 500);
+  }
+});
+
+// Delete message
+app.delete('/admin/messages/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    await c.env.DB.prepare('DELETE FROM messages WHERE id = ?').bind(id).run();
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: 'Failed to delete message' }, 500);
   }
 });
 
